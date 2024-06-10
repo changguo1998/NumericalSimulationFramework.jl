@@ -2,16 +2,16 @@ include(joinpath(@__DIR__, "../src/NumericalSimulationFramework.jl"))
 
 GE = NumericalSimulationFramework.GoverningEquation
 
+DIM = 2
+
 eqstrs = String[]
 
-DIM = 3
-
 for i = 1:DIM
-    push!(eqstrs, "v$i == ∂t u$i")
+    push!(eqstrs, "∂t u$i == v$i")
 end
 
 for i = 1:DIM
-    push!(eqstrs, "a$i == ∂t v$i")
+    push!(eqstrs, "∂t v$i == a$i")
 end
 
 for i = 1:DIM

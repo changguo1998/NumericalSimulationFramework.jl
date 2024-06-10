@@ -5,12 +5,13 @@ high level discriptions of the program.
 
 ## Developing Schedule
 
-- Meshing
 - Governing Equation
   - [x] Parse equation set
+- Mesh
   - [ ] Discretization
 - Time Scheme
   - [ ] Euler
-- Boundary
+- Boundary Condition
 - Initial Condition
   - [ ] Interpolation
+- IO

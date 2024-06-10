@@ -5,6 +5,8 @@ Parse equation and numerically discretize them.
 """
 module GoverningEquation
 
+import Base: isequal, ==, isless, <, unique!, unique
+
 export Expression
 
 """
@@ -203,6 +205,58 @@ function printexpression(expr::Expression, indent::String="")
         printexpression(e, "  "*indent)
     end
     return nothing
+end
+
+function getexpressionvars(expr::Expression)
+    if isempty(expr.operands)
+        if all(c->isdigit(c) || (c ∈ ('-', '.')), collect(expr.operator))
+            return Expression[]
+        else
+            return [expr;]
+        end
+    else
+        return vcat(getexpressionvars.(expr.operands)...)
+    end
+end
+
+# export isless, <
+
+isless(expr1::Expression, expr2::Expression) = Base.isless(expr1.operator, expr2.operator)
+
+<(expr1::Expression, expr2::Expression) = isless(expr1, expr2)
+
+# export isequal, ==
+
+function isequal(expr1::Expression, expr2::Expression)
+    if !Base.isequal(expr1.operator, expr2.operator)
+        return false
+    end
+    if isempty(expr1.operands) && isempty(expr2.operands)
+        return true
+    end
+    if !isequal(length(expr1.operands), length(expr2.operands))
+        return false
+    end
+    return all(map(isequal, expr1.operands, expr2.operands))
+end
+
+==(expr1::Expression, expr2::Expression) = isequal(expr1, expr2)
+
+# export unique, unique!
+
+function unique(itr::Vector{Expression})
+    buffer = Expression[]
+    for e in itr
+        if e ∉ buffer
+            push!(buffer, e)
+        end
+    end
+    return buffer
+end
+
+function unique!(itr::Vector{Expression})
+    itr = unique(itr)
+    return itr
 end
 
 export Equation

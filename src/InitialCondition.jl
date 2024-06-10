@@ -1,0 +1,3 @@
+module InitialCondition
+
+end # InitialCondition
